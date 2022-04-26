@@ -101,7 +101,10 @@ func expectedDeployments(ctx context.Context, params Params, expected []appsv1.D
 
 		if params.Instance.Spec.MaxReplicas != nil {
 			currentReplicas := existing.Status.Replicas
-			*updated.Spec.Replicas = currentReplicasWithHPA(params.Instance.Spec, currentReplicas)
+			fmt.Println("DEBUG: current replicas", currentReplicas)
+			currentReplicas = currentReplicasWithHPA(params.Instance.Spec, currentReplicas)
+			fmt.Println("DEBUG: current replicas after: ", currentReplicas)
+			updated.Spec.Replicas = &currentReplicas
 		}
 
 		patch := client.MergeFrom(existing)
